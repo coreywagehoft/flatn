@@ -55,8 +55,6 @@ async.series([
 		 * array of files into the files var.
 		 */
 		readDirectory(base_path, 1, function(callback) {
-			console.log(callback.files);
-
 			files = callback.files;
 			next_step();
 		});
@@ -85,7 +83,7 @@ async.series([
 		// thumbs if we want them
 		// We force this to be syncronous as to not overload the cpu with all
 		// of the GD
-		async.eachSeries(files, function(file){
+		async.eachSeries(files, function(file) {
 
 
 			// Get the filename out of the absolute path
@@ -144,7 +142,7 @@ async.series([
 					console.log(to);
 
 					fs.rename(file, to, function(cb) {
-						if(cb) {
+						if(!cb) {
 							next_step();
 						} else {
 							next_step('Error Moving File: ' + file);
@@ -153,11 +151,14 @@ async.series([
 				}
 			], function(err) {
 				if(!err) {
-					log.success('File Moved: ' + filename);
+					log.info('File Moved: ' + filename);
+					next_step();
 				} else {
 					log.error(err);
+					next_step();
 				}
 			});
+
 		},function(err) {
 			if(err) {
 				log.error('ERROR');
