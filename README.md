@@ -17,9 +17,12 @@ NodeJS script to flatten directory structure and create thumbs of images within 
 * CentOS - `yum install imagemagick`
 
 ### Configure flatn.js
-1. Change `base_path` on line 17 to the base directory of images
-2. Change `flatn_to` on line 20 to the directory where the images should goto.
-3. Change `thumbs_dir` on line 23 to where the thumbs directory should go
+
+Open config.js and change your paths accordingly.
+
+1. Change `base_path` to the base directory of images
+2. Change `flatn_to` to the directory where the images should goto.
+3. Change `thumbs_dir` to where the thumbs directory should go
 4. Optional: Change the thumb height and width
 
 ### Run Flatn

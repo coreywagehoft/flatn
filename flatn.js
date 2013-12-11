@@ -20,7 +20,7 @@ var im = require('imagemagick');
 var winston = require('winston');
 var path = require('path');
 var async = require('async');
-eval(fs.readFileSync('utils.js')+'');
+eval(fs.readFileSync('utils/utils.js')+'');
 eval(fs.readFileSync('config.js')+'');
 
 // Uploads Directory Absolute Path
