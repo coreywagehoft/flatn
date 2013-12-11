@@ -14,13 +14,13 @@
  */
 
 // Uploads Directory Absolute Path
-var base_path = '/Users/coreywagehoft/Projects/flatn/uploads/awpcp';
+var base_path = '/Users/coreywagehoft/Projects/flatn/uploads/awpcp/';
 
 // Directory to send images down to. "Flatn"
 var flatn_to = '/Users/coreywagehoft/Projects/flatn/uploads/';
 
 // Thumb Options
-var thumbs_dir = '/Users/coreywagehoft/Projects/flatn/uploads/thumbs';
+var thumbs_dir = '/Users/coreywagehoft/Projects/flatn/uploads/thumbs/';
 var thumb_width = 300;
 var thumb_height = 125;
 
@@ -194,7 +194,7 @@ async.series([
 								// Image magick resizing
 								im.resize({
 									srcPath: file,
-									dstPath: thumbs_dir + '/' + filename,
+									dstPath: thumbs_dir + filename,
 									width: width,
 									height: height
 								}, function(err, stdout, stderr) {
@@ -227,7 +227,7 @@ async.series([
 				function(inner_next_step) {
 
 					// Create the to absolute path
-					var to = flatn_to + '/' + filename;
+					var to = flatn_to + filename;
 
 					// rename is how to move files with nodejs
 					fs.rename(file, to, function(cb) {
@@ -244,13 +244,13 @@ async.series([
 				function(inner_next_step) {
 
 					// Create the to absolute path
-					var file_path = flatn_to + '/' + filename;
+					var file_path = flatn_to + filename;
 					var file_sliced = filename.slice(0, -4);
 					var extension = (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename) : undefined;
 
 					// Now lets copy this file
 					fs.createReadStream(file_path)
-					.pipe(fs.createWriteStream(flatn_to + '/' + file_sliced + '-large.' + extension));
+					.pipe(fs.createWriteStream(flatn_to + file_sliced + '-large.' + extension));
 
 					log.info('* Large version created');
 
