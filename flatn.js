@@ -120,7 +120,6 @@ async.series([
 						log.error('Error Removing File: ' + err + ' File: ' + file);
 						next_each();
 					} else {
-						log.info('Removed Unneeded File: ' + file);
 
 						// Now after we have removed the unneeded file
 						// Lets remove it from the files array so that 
@@ -143,6 +142,8 @@ async.series([
 		}, function(err) {
 			if(err) {
 				log.error('Error Removing Files: ' + err);
+			} else {
+				log.info('Removed Unneeded Files');
 			}
 
 			next_step();
@@ -167,6 +168,15 @@ async.series([
 
 			async.series([
 
+				function(inner_next_step) {
+
+					console.log('');
+					log.info('******************************************');
+					log.info('** Processing File: ' + filename);
+
+					inner_next_step();
+				},
+
 				// Resize the images if we have a thumbs directory
 				function(inner_next_step) {
 
@@ -188,10 +198,10 @@ async.series([
 								}, function(err, stdout, stderr) {
 
 									if(!err) {
-										log.info('Resize Successful: ' + filename);
+										log.info('* Resize Successful');
 										inner_next_step();
 									} else {
-										log.error('Error: ' + err);
+										log.error('* Resize Error: ' + err);
 										inner_next_step(err);
 									}
 
@@ -239,14 +249,16 @@ async.series([
 					fs.createReadStream(file_path)
 					.pipe(fs.createWriteStream(flatn_to + '/' + file_sliced + '-large.' + extension));
 
-					log.info('Large version created: ' + filename);
+					log.info('* Large version created');
 
 					inner_next_step();
 				}
 
 			], function(err) {
 				if(!err) {
-					log.info('File Moved: ' + filename);
+					log.info('* File Moved');
+					log.info('******************************************');
+
 					next_each();
 				} else {
 					log.error(err);
@@ -268,7 +280,7 @@ async.series([
 	} else {
 		console.log('');
 		log.info('Images Processed: ' + files.length);
-		log.info(' #### DONE WITH FLATN ####');
+		log.info(' #### FLATN IS COMPLETE ####');
 		console.log('');
 	}
 });
