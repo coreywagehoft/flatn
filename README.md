@@ -1,5 +1,7 @@
 # Flatn
 
+NodeJS script to flatten directory structure and create thumbs of images within them
+
 ## Dependancies
 - NodeJS
 -- Windows Install - [http://nodejs.org/download/](http://nodejs.org/download/)
