@@ -17,10 +17,10 @@
 var base_path = '/Users/coreywagehoft/Projects/flatn/uploads/awpcp';
 
 // Directory to send images down to. "Flatn"
-var flatn_to = '/Users/coreywagehoft/Projects/flatn/uploads/awpcp';
+var flatn_to = '/Users/coreywagehoft/Projects/flatn/uploads/';
 
 // Thumb Options
-var thumbs_dir = '/Users/coreywagehoft/Projects/flatn/uploads/awpcp/thumbs';
+var thumbs_dir = '/Users/coreywagehoft/Projects/flatn/uploads/thumbs';
 var thumb_width = 300;
 var thumb_height = 125;
 
@@ -32,7 +32,7 @@ var im = require('imagemagick');
 var winston = require('winston');
 var path = require('path');
 var async = require('async');
-eval(fs.readFileSync('readdir.js')+'');
+eval(fs.readFileSync('utils.js')+'');
 
 var customColors = {
 	levels: {
@@ -64,6 +64,7 @@ winston.addColors(customColors.colors);
  * Scoped Variableds
  */
 var files = [];
+var directories = [];
 
 async.series([
 
@@ -76,8 +77,9 @@ async.series([
 		
 		log.info('Reading Files...');
 
-		readDirectory(base_path, 1, function(callback) {
+		readDirectory(base_path, 3, function(callback) {
 			files = callback.files;
+			directories = callback.dirs;
 			next_step();
 		});
 
@@ -182,8 +184,8 @@ async.series([
 
 					if(thumbs_dir) {
 
-						height = thumb_height ? thumb_height : 0;
-						width = thumb_width ? thumb_width : 0;
+						var height = thumb_height ? thumb_height : 0;
+						var width = thumb_width ? thumb_width : 0;
 
 						im.identify(file, function(err,features) {
 
@@ -210,6 +212,7 @@ async.series([
 										inner_next_step(err);
 									}
 								});
+
 							} else {
 
 								inner_next_step();
@@ -273,11 +276,24 @@ async.series([
 			next_step();
 		});
 
+	},
+
+	// Clean up our mess after flattening everything
+	function(next_step) {
+
+		async.eachSeries(directories, function(directory, next_each) {
+
+			deleteFolderRecursive(directory);
+			next_each();
+
+		}, function() { next_step(); });
+
 	}], function(err) {
 
 	if(err) {
 		log.error(err);
 	} else {
+
 		console.log('');
 		log.info('Images Processed: ' + files.length);
 		log.info(' #### FLATN IS COMPLETE ####');
