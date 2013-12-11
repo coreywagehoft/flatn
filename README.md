@@ -3,17 +3,17 @@
 NodeJS script to flatten directory structure and create thumbs of images within them
 
 ## Dependancies
-- NodeJS
--- Windows Install - [http://nodejs.org/download/](http://nodejs.org/download/)
--- OSX Install - brew install node
--- Ubuntu - apt-get install nodejs
--- CentOS - yum install nodejs
+* NodeJS
+** Windows Install - [http://nodejs.org/download/](http://nodejs.org/download/)
+** OSX Install - brew install node
+** Ubuntu - apt-get install nodejs
+** CentOS - yum install nodejs
 
-- ImageMagick
--- OSX Install - brew install imagemagick
--- Windows - [http://www.imagemagick.org/script/binary-releases.php#windows](http://www.imagemagick.org/script/binary-releases.php#windows)
--- Ubuntu - apt-get install imagemagick
--- CentOS - yum install imagemagick
+* ImageMagick
+** OSX Install - brew install imagemagick
+** Windows - [http://www.imagemagick.org/script/binary-releases.php#windows](http://www.imagemagick.org/script/binary-releases.php#windows)
+** Ubuntu - apt-get install imagemagick
+** CentOS - yum install imagemagick
 
 ## Configure flatn.js
 
