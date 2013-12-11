@@ -134,6 +134,7 @@ async.series([
 			// Get the filename out of the absolute path
 			var filename = file.replace(/^.*[\\\/]/, '');
 			var file_sliced = filename.slice(0, -4);
+			var extension = (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename) : undefined;
 
 			async.series([
 
@@ -158,24 +159,63 @@ async.series([
 
 							if(features && (features.format == 'JPEG' || features.format == 'PNG')) {
 
-								// Image magick resizing
-								im.resize({
-									srcPath: file,
-									dstPath: thumbs_dir + filename,
-									width: width,
-									height: height
-								}, function(err, stdout, stderr) {
+								async.parallel([
 
+									function(next_task) {
+
+										// Image magick resizing
+										im.resize({
+											srcPath: file,
+											dstPath: thumbs_dir + filename,
+											width: width,
+											height: height
+										}, function(err, stdout, stderr) {
+
+											if(!err) {
+												log.info('* Thumbnail Creation Successful');
+												next_task();
+											} else {
+												log.error('* Resize Error: ' + err);
+												next_task(err);
+											}
+
+											if(stderr) {
+												log.error('stderr: ' + stderr);
+												next_task(err);
+											}
+										});
+											},
+											function(next_task) {
+												if(Config.primary_thumb_width && Config.primary_thumb_height) {
+													im.resize({
+														srcPath: file,
+														dstPath: thumbs_dir + file_sliced + '-primary.' + extension,
+														width: Config.primary_thumb_width,
+														height: Config.primary_thumb_height
+													}, function(err, stdout, stderr) {
+
+														if(!err) {
+															log.info('* Primary Thumbnail Successful');
+															next_task();
+														} else {
+															log.error('* Resize Error: ' + err);
+															next_task(err);
+														}
+
+														if(stderr) {
+															log.error('stderr: ' + stderr);
+															next_task(err);
+														}
+													});
+
+												} else {
+													next_task();
+												}
+											}
+								], function(err) {
 									if(!err) {
-										log.info('* Resize Successful');
 										inner_next_step();
 									} else {
-										log.error('* Resize Error: ' + err);
-										inner_next_step(err);
-									}
-
-									if(stderr) {
-										log.error('stderr: ' + stderr);
 										inner_next_step(err);
 									}
 								});
