@@ -12,18 +12,6 @@
  *  -- Ubuntu: apt-get install imagemagick
  *  -- CentOS: yum install imagemagick
  */
-
-// Uploads Directory Absolute Path
-var base_path = '/Users/coreywagehoft/Projects/flatn/uploads/awpcp/';
-
-// Directory to send images down to. "Flatn"
-var flatn_to = '/Users/coreywagehoft/Projects/flatn/uploads/';
-
-// Thumb Options
-var thumbs_dir = '/Users/coreywagehoft/Projects/flatn/uploads/thumbs/';
-var thumb_width = 300;
-var thumb_height = 125;
-
 /**
  * Libraries Required
  */
@@ -33,6 +21,18 @@ var winston = require('winston');
 var path = require('path');
 var async = require('async');
 eval(fs.readFileSync('utils.js')+'');
+eval(fs.readFileSync('config.js')+'');
+
+// Uploads Directory Absolute Path
+var base_path = Config.base_path;
+
+// Directory to send images down to. "Flatn"
+var flatn_to = Config.flatn_to;
+
+// Thumb Options
+var thumbs_dir = Config.thumbs_dir;
+var thumb_width = Config.thumb_width;
+var thumb_height = Config.thumb_height;
 
 var customColors = {
 	levels: {
