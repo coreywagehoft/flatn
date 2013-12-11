@@ -2,16 +2,10 @@
  *  -- Flatn --
  * @author Corey Wagehoft - Dom & Tom 2013
  *
- * This will recursively go into folders move images down to a defined base path,
- * create a thumbnail using GD and another "large file version"
- *
- * ## DEPENDANCIES ##
- *  - ImageMagick
- *  -- Mac: brew install imagemagick
- *  -- Windows: http://www.imagemagick.org/script/binary-releases.php#windows
- *  -- Ubuntu: apt-get install imagemagick
- *  -- CentOS: yum install imagemagick
+ * This will recursively go into folders move images down to a defined path,
+ * create a thumbnail using ImageMagick and another "large file version".
  */
+
 /**
  * Libraries Required
  */
@@ -20,52 +14,25 @@ var im = require('imagemagick');
 var winston = require('winston');
 var path = require('path');
 var async = require('async');
-eval(fs.readFileSync('utils/utils.js')+'');
 eval(fs.readFileSync('config.js')+'');
-
-// Uploads Directory Absolute Path
-var base_path = Config.base_path;
-
-// Directory to send images down to. "Flatn"
-var flatn_to = Config.flatn_to;
-
-// Thumb Options
-var thumbs_dir = Config.thumbs_dir;
-var thumb_width = Config.thumb_width;
-var thumb_height = Config.thumb_height;
-
-var customColors = {
-	levels: {
-
-	},
-	colors: {
-		success: 'green',
-		info: 'blue',
-		warn: 'yellow',
-		error: 'red'
-	}
-};
-
-/**
- * Setting up logging for console and to a file for later review if needed
- */
-
-var log = new (winston.Logger)({
-	transports: [
-		new (winston.transports.Console)({colorize: true}),
-		new (winston.transports.File)({ filename: 'flatn.log', level: 'error'})
-	]
-});
-
-// Color Support for Logging?
-winston.addColors(customColors.colors);
+eval(fs.readFileSync('utils/utils.js')+'');
+eval(fs.readFileSync('utils/logging.js')+'');
 
 /*
  * Scoped Variableds
  */
 var files = [];
 var directories = [];
+var base_path = Config.base_path;
+var flatn_to = Config.flatn_to;
+var thumbs_dir = Config.thumbs_dir;
+var thumb_width = Config.thumb_width;
+var thumb_height = Config.thumb_height;
 
+/**
+ * Ok Lets get down the business.  Running things syncronous to make sure
+ * nothing happens out of order, with a large dataset this is very possible.
+ */
 async.series([
 
 	function(next_step) {
