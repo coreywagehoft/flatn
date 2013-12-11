@@ -76,7 +76,7 @@ async.series([
 
 		log.info('Checking for files we need to remove..');
 
-		async.eachLimit(files,40,function(file,next_each) {
+		async.eachSeries(files,function(file,next_each) {
 
 			// Gets the filename from the absolute path;
 			var filename = file.replace(/^.*[\\\/]/, '');
@@ -129,7 +129,7 @@ async.series([
 		log.info('Processing image thumbnails & moving images..');
 		console.log('');
 
-		async.eachLimit(files,40,function(file,next_each) {
+		async.eachSeries(files,function(file,next_each) {
 
 			// Get the filename out of the absolute path
 			var filename = file.replace(/^.*[\\\/]/, '');
